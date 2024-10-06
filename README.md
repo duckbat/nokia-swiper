@@ -1,1 +1,1 @@
-# nokia-swiper
+# nokia-swiper app
