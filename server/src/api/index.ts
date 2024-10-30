@@ -9,4 +9,6 @@ router.get<{}, MessageResponse>('/', (_req: Request, res: Response) => {
   });
 });
 
+// Routes
+
 export default router;
