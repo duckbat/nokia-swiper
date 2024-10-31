@@ -8,10 +8,6 @@ type Response = Document & {
   createdAt: Date; // Timestamp for when the response was created
 };
 
-type AddResponseRequest = {
-  questionId: string; // ID of the associated question
-  userName: string; // Name provided by the user
-  responseType: 'like' | 'dislike'; // Type of response
-};
 
-export {Response, AddResponseRequest};
+
+export {Response};
