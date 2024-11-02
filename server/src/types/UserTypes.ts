@@ -1,16 +1,19 @@
 import { Document } from 'mongoose';
 
-type User = {
-  name: string;
+export type User = Document & {
+  name?: string;
   isGuest: boolean; // Indicates if the user is a guest
   createdAt: Date;
+  swipes: Array<{
+    questionId: string;
+    liked: boolean;
+  }>;
 }
 
-type Admin = Document & {
+export type Admin = Document & {
   username: string;
-  password: string; 
+  password: string;
   email: string;
   createdAt: Date;
+  questionsAdded: Array<string>; // Array of questionIds added by the admin
 }
-
-export { User, Admin };

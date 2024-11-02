@@ -1,17 +1,8 @@
-// types/QuestionTypes.ts
-import {Document} from 'mongoose';
-import mongoose from 'mongoose';
+import { Document } from 'mongoose';
 
-type Question = Document & {
+export type Question = Document & {
   text: string;
+  category: string;
+  createdBy: string; // 'AI' or 'Admin'
   createdAt: Date;
-  updatedAt: Date; 
-};
-
-type Summary = Document & {
-  questionId: mongoose.Types.ObjectId; // Reference to the associated question
-  summaryText: string; // The generated summary text
-  createdAt: Date; // Timestamp for when the summary was created
-};
-
-export {Question, Summary};
+}
