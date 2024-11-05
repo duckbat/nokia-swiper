@@ -1,0 +1,49 @@
+### Add Swipe to Session
+POST http://localhost:3000/api/v1/sessions/swipe
+Content-Type: application/json
+
+{
+  "sessionId": "1730841077902",
+  "questionId": "672a87f7feff048f7de6e206",
+  "response": true
+}
+
+### Complete Session
+POST http://localhost:3000/api/v1/sessions/complete
+Content-Type: application/json
+
+{
+  "sessionId": "1730841077902"
+}
+
+### Create Question
+POST http://localhost:3000/api/v1/questions
+Content-Type: application/json
+
+{
+  "text": "Did you like our food?",
+  "createdBy": "admin"
+}
+
+### Update Question
+PUT http://localhost:3000/api/v1/questions/1730840567353
+Content-Type: application/json
+
+{
+  "newText": "How would you rate the food?"
+}
+
+### Delete Question
+DELETE http://localhost:3000/api/v1/questions/60d0fe4f5311236168a109ca
+
+### Get All Questions
+GET http://localhost:3000/api/v1/questions
+
+### Get Summary by Session ID
+GET http://localhost:3000/api/v1/summaries/1234567890
+
+### Get All Summaries
+GET http://localhost:3000/api/v1/summaries
+
+### Get All Sessions
+GET http://localhost:3000/api/v1/sessions
