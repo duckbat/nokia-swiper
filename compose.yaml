@@ -1,0 +1,11 @@
+# Docker Compose configuration for Nokia-Swipes API
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - server/.env
+    ports:
+      - "3000:3000"
