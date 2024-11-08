@@ -17,8 +17,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-      with:
-        node-version: '20'
 
     - name: Set up Node.js
       uses: actions/setup-node@v4
@@ -33,7 +31,24 @@ jobs:
     - name: Start server
       run: |
         npm start &
-        sleep 10
+
+    - name: Wait for server to be ready
+      run: |
+        n=0
+        until [ $n -ge 10 ]; do
+          response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:3000/api/v1/questions)
+          if [ "$response" -eq 200 ]; then
+            echo "Server is up!"
+            break
+          fi
+          n=$((n+1))
+          echo "Waiting for server to start..."
+          sleep 3
+        done
+        if [ $n -ge 10 ]; then
+          echo "Server failed to start in time"
+          exit 1
+        fi
 
     - name: Install Newman (Postman CLI)
       run: npm install -g newman
@@ -56,4 +71,3 @@ jobs:
       with:
         name: newman-results
         path: newman-results.json
-        
