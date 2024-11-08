@@ -1,5 +1,10 @@
 import express from 'express';
-import { createQuestion, updateQuestion, deleteQuestion, getAllQuestions } from '../controllers/questionController';
+import {
+  createQuestion,
+  updateQuestion,
+  deleteQuestion,
+  getAllQuestions,
+} from '../controllers/questionController';
 
 const router = express.Router();
 

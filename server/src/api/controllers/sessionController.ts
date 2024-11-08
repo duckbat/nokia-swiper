@@ -2,6 +2,7 @@ import {Request, Response, NextFunction} from 'express';
 import Session from '../models/sessionModel';
 import Question from '../models/questionModel';
 import Summary from '../models/summaryModel';
+import Category from '../models/categoryModel';
 import CustomError from '../../classes/CustomError';
 import {ApiResponse} from '../../types/Messages';
 import {ISession} from '../../types/SessionTypes';
@@ -165,13 +166,18 @@ export const completeSession = async (
     }));
 
     // Mock categories for the summary
-    const categories = [
-      'Food Quality',
-      'Event Organization',
-      'Venue Atmosphere',
-      'Staff Friendliness',
-      'Tech Experience',
-    ];
+    // const categories = [
+    //   'Food Quality',
+    //   'Event Organization',
+    //   'Venue Atmosphere',
+    //   'Staff Friendliness',
+    //   'Tech Experience',
+    // ];
+    
+    // Retrieve categories from the database
+    const categoriesDocs = await Category.find({});
+    const categories = categoriesDocs.map((category) => category.text);
+
 
     // Generate summary based on swipes using AI
     const prompt = `Based on the following feedback, provide a unique description for each category listed below for the user. The feedback represents how users felt about different aspects of an event, including whether they "liked" or "disliked" certain aspects.

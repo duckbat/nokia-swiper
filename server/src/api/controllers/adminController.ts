@@ -20,8 +20,6 @@ export const downloadSummariesAsCsv = async (req: Request, res: Response, next: 
   }
 };
 
-// TODO: Add (Add Category) functionality to summary  
-
 // TODO: Implement admin functionalities and login logic
 
 // // Get data for graph visualization (e.g., for Food ratings)

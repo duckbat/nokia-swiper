@@ -1,5 +1,8 @@
 import express from 'express';
-import { getSummaryBySessionId, getAllSummaries } from '../controllers/summaryController';
+import {
+  getSummaryBySessionId,
+  getAllSummaries,
+} from '../controllers/summaryController';
 
 const router = express.Router();
 
