@@ -37,18 +37,7 @@ jobs:
 
     - name: Archive Test Results
       if: failure()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: newman-results
         path: newman-results.json
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
-    if: github.ref == 'refs/heads/server_1.0'
-
-    steps:
-    - name: Deploy Application
-      run: |
-        echo "Deploy step here - add deployment commands."
-        # You can include any command that runs your deployment, such as Docker or SSH commands
