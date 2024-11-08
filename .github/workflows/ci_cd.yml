@@ -29,7 +29,10 @@ jobs:
     - name: Run Postman Collection
       run: |
         newman run ./server/test/Nokia-Swipes.postman_collection.json \
-          --env-var "DB_CONNECTION_STRING=null" \
+          --env-var "NODE_ENV=development" \
+          --env-var "PORT=3000" \
+          --env-var "DB_URL=${{ secrets.DB_URL }}" \
+          --env-var "OPENAI_API_URL=${{ secrets.OPENAI_API_URL }}" \
           --env-var "MONGODB_URI=null" \
           --disable-unicode \
           --reporters cli,json \
