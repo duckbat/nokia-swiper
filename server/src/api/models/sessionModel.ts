@@ -12,10 +12,14 @@ const SessionSchema = new Schema<ISession>({
         ref: 'Question',
         required: true,
       }, // Reference to Question model
-      response: 
-      {type: Boolean, 
-        required: true
-    }, // True for like, false for dislike
+      questionText: {
+        type: String,
+        required: true,
+      }, // Store the question text for easier data analysis
+      response: {
+        type: Boolean,
+        required: true,
+      }, // True for like, false for dislike
     },
   ],
   isComplete: {type: Boolean, default: false}, // Default value to indicate if the session is complete

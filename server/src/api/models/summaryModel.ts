@@ -3,7 +3,13 @@ import {ISummary} from '../../types/SummaryTypes'; // Adjust the path as necessa
 
 const SummarySchema = new Schema<ISummary>({
   sessionId: {type: Schema.Types.ObjectId, required: true, ref: 'UserSession'},
-  categories: {type: Map, of: String, required: true}, // Using Map for dynamic categories
+  categories: {
+    type: Map,
+    of: new Schema({
+      description: {type: String, required: true},
+    }),
+    required: true,
+  }, // Using Map for dynamic categories
   timestamp: {type: Date, default: Date.now},
 });
 
