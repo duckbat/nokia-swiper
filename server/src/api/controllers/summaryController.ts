@@ -35,3 +35,17 @@ export const getAllSummaries = async (req: Request, res: Response<ApiResponse<IS
     next(new CustomError((error as Error).message, 500));
   }
 };
+
+// Delete all summaries
+export const deleteAllSummaries = async (req: Request, res: Response<ApiResponse<null>>, next: NextFunction) => {
+  try {
+    await Summary.deleteMany({});
+    res.status(200).json({
+      success: true,
+      message: 'All summaries deleted',
+    });
+  } catch (error) {
+    next(new CustomError((error as Error).message, 500));
+  }
+};
+

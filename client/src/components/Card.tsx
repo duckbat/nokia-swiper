@@ -1,14 +1,13 @@
-import {motion, PanInfo} from 'framer-motion';
-import {useState} from 'react';
+import { motion, PanInfo } from 'framer-motion';
+import React from 'react';
 
 interface CardProps {
   content: string;
   onSwipe: (direction: 'left' | 'right') => void;
 }
 
-const Card: React.FC<CardProps> = ({content, onSwipe}) => {
-  // Set the drag constraints based on card size
-  const dragConstraints = {left: -150, right: 150};
+const Card: React.FC<CardProps> = ({ content, onSwipe }) => {
+  const dragConstraints = { left: -150, right: 150 };
 
   const handleDragEnd = (
     event: MouseEvent | TouchEvent | PointerEvent,
@@ -43,12 +42,12 @@ const Card: React.FC<CardProps> = ({content, onSwipe}) => {
         alignItems: 'center',
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
         cursor: 'pointer',
-        position: 'absolute', // Ensure cards stack on top of each other
+        position: 'absolute',
       }}
-      whileTap={{scale: 0.95}}
-      initial={{opacity: 0, y: 20}} // Add some initial position for better appearance
-      animate={{opacity: 1, y: 0}} // Center the card when it appears
-      exit={{opacity: 0, y: -20}} // Animate out when swiped
+      whileTap={{ scale: 0.95 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
     >
       {content}
     </motion.div>

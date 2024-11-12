@@ -53,3 +53,126 @@ body {
   }
 }
 
+
+.swipe-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+  min-height: -webkit-fill-available;
+  text-align: center;
+  width: 100vw;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.swipe-title {
+  font-size: 30px;
+  font-weight: bold;
+  color: #333;
+}
+
+.swipe-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 20px;
+}
+
+.swipe-input {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.swipe-start-button {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  background-color: #0070f3;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.swipe-anonymous-button {
+  margin-top: 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  color: #333;
+}
+
+.swipe-tap-message {
+  font-size: 15px;
+  color: #333;
+}
+
+.swipe-tap-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+}
+
+.swipe-instructions {
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.swipe-results {
+  text-align: left;
+  max-width: 500px;
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.swipe-submit-button {
+  margin-top: 30px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  background-color: #0070f3;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.swipe-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 500px;
+  gap: 50px;
+}
+
+.swipe-button {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.swipe-left-button {
+  background-color: #ff4757;
+  color: white;
+}
+
+.swipe-right-button {
+  background-color: #2ed573;
+  color: white;
+}
