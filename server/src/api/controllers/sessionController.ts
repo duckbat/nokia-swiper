@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {Request, Response, NextFunction} from 'express';
 import Session from '../models/sessionModel';
 import Question from '../models/questionModel';
@@ -141,6 +142,32 @@ export const deleteAllSessions = async (
 
 
 // Mark session as complete and create a summary
+
+// Retry mechanism for fetching data from OpenAI API
+const fetchDataWithRetry = async (
+  url: string,
+  options: any,
+  retries: number = 3,
+  delay: number = 2000,
+): Promise<ChatCompletion> => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetchData<ChatCompletion>(url, options);
+      return response;
+    } catch (error) {
+      if (error instanceof CustomError && error.message.includes('429') && i < retries - 1) {
+        console.warn(`Rate limit hit, retrying in ${delay}ms... (${i + 1}/${retries})`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        delay *= 2; // Exponential backoff
+      } else {
+        throw error;
+      }
+    }
+  }
+  throw new CustomError('Max retries exceeded for OpenAI API', 429);
+};
+
+// Complete Session function
 export const completeSession = async (
   req: Request,
   res: Response<ApiResponse<ISummary>>,
@@ -165,19 +192,9 @@ export const completeSession = async (
       response: swipe.response ? 'liked' : 'disliked',
     }));
 
-    // Mock categories for the summary
-    // const categories = [
-    //   'Food Quality',
-    //   'Event Organization',
-    //   'Venue Atmosphere',
-    //   'Staff Friendliness',
-    //   'Tech Experience',
-    // ];
-    
     // Retrieve categories from the database
     const categoriesDocs = await Category.find({});
     const categories = categoriesDocs.map((category) => category.text);
-
 
     // Generate summary based on swipes using AI
     const prompt = `Based on the following feedback, provide a unique description for each category listed below for the user. The feedback represents how users felt about different aspects of an event, including whether they "liked" or "disliked" certain aspects.
@@ -190,7 +207,8 @@ ${JSON.stringify(feedback, null, 2)}
 For each category, write a brief and descriptive summary based on the feedback in the format: "Category: Description" Description example: "You had a positive experience and enjoyed the overall organization of the event."
 If there is no feedback for a particular category, provide a suitable general description. Be concise but descriptive.`;
 
-    const response = await fetchData<ChatCompletion>(
+    // Fetch response from OpenAI with retry mechanism
+    const response = await fetchDataWithRetry(
       `${process.env.OPENAI_API_URL}/v1/chat/completions`,
       {
         method: 'POST',
@@ -215,6 +233,8 @@ If there is no feedback for a particular category, provide a suitable general de
           max_tokens: 300,
         }),
       },
+      3, // Number of retries
+      2000, // Initial delay between retries in milliseconds
     );
 
     if (
