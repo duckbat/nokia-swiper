@@ -1,31 +1,35 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-'use client';
+"use client";
 
-import { useEffect, useLayoutEffect, useState } from 'react';
-import Card from './Card';
-import { AnimatePresence, motion } from 'framer-motion';
-import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
-
+import { useEffect, useLayoutEffect, useState } from "react";
+import Card from "./Card";
+import Summary from "./Summary";
+import SwipeButtons from "./SwipeButtons";
+import { AnimatePresence, motion } from "framer-motion";
+import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 
 interface Question {
   _id: string;
   text: string;
 }
 
-type SwipeDirection = 'left' | 'right';
+type SwipeDirection = "left" | "right";
 
 const SwipeCards: React.FC = () => {
   const [cards, setCards] = useState<Question[]>([]);
   const [responses, setResponses] = useState<{ [key: string]: boolean }>({});
   const [name, setName] = useState<string | null>(null);
-  const [username, setUsername] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [tapped, setTapped] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [summaryData, setSummaryData] = useState<Record<string, { description: string }> | null>(null);
+  const [summaryData, setSummaryData] = useState<Record<
+    string,
+    { description: string }
+  > | null>(null);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -36,7 +40,7 @@ const SwipeCards: React.FC = () => {
         const response = await axios.get(`${API_BASE_URL}/questions`);
         setCards(response.data.data);
       } catch (error) {
-        console.error('Failed to fetch cards:', error);
+        console.error("Failed to fetch cards:", error);
       }
     };
 
@@ -44,23 +48,23 @@ const SwipeCards: React.FC = () => {
   }, [API_BASE_URL]);
 
   const startSwiping = async (isAnonymous = false) => {
-    if (!isAnonymous && username.trim() === '') {
-      setError('Please enter your name before starting.');
-      setTimeout(() => setError(''), 1250);
+    if (!isAnonymous && username.trim() === "") {
+      setError("Please enter your name before starting.");
+      setTimeout(() => setError(""), 1250);
       return;
     }
-    setName(isAnonymous ? 'Anonymous' : username);
-    setError('');
+    setName(isAnonymous ? "Anonymous" : username);
+    setError("");
 
     try {
       // Create a new session in the backend
       const response = await axios.post(`${API_BASE_URL}/sessions`, {
-        username: isAnonymous ? 'Anonymous' : username,
+        username: isAnonymous ? "Anonymous" : username,
         anonymous: isAnonymous,
       });
       setSessionId(response.data.data.sessionId);
     } catch (error) {
-      console.error('Failed to create session:', error);
+      console.error("Failed to create session:", error);
     }
   };
 
@@ -72,17 +76,17 @@ const SwipeCards: React.FC = () => {
         await axios.post(`${API_BASE_URL}/sessions/swipe`, {
           sessionId,
           questionId: currentCard._id,
-          response: direction === 'right', // true if liked (right), false if disliked (left)
+          response: direction === "right", // true if liked (right), false if disliked (left)
         });
 
         // Update UI to remove swiped card
         setResponses((prevResponses) => ({
           ...prevResponses,
-          [currentCard.text]: direction === 'right',
+          [currentCard.text]: direction === "right",
         }));
         setCards((prev) => prev.slice(1));
       } catch (error) {
-        console.error('Failed to record swipe:', error);
+        console.error("Failed to record swipe:", error);
       }
     }
   };
@@ -94,11 +98,11 @@ const SwipeCards: React.FC = () => {
         const response = await axios.post(`${API_BASE_URL}/sessions/complete`, {
           sessionId,
         });
-        console.log('Summary created:', response.data);
+        console.log("Summary created:", response.data);
         setSummaryData(response.data.data.categories);
         setSubmitted(true);
       } catch (error) {
-        console.error('Failed to complete session:', error);
+        console.error("Failed to complete session:", error);
       }
     }
   };
@@ -133,7 +137,10 @@ const SwipeCards: React.FC = () => {
                 onChange={(e) => setUsername(e.target.value)}
                 className="swipe-input"
               />
-              <button onClick={() => startSwiping()} className="swipe-start-button">
+              <button
+                onClick={() => startSwiping()}
+                className="swipe-start-button"
+              >
                 Start
               </button>
             </motion.div>
@@ -173,33 +180,52 @@ const SwipeCards: React.FC = () => {
 
       <AnimatePresence>
         {cards.length > 0 ? (
-          <Card key={cards[0]._id} content={cards[0].text} onSwipe={handleSwipe} />
+          <Card
+            key={cards[0]._id}
+            content={cards[0].text}
+            onSwipe={handleSwipe}
+          />
         ) : (
           <motion.div
             key="results"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="swipe-results"
           >
             {submitted ? (
-              <div>
-                <h2>Summary</h2>
-                {summaryData ? (
-                  Object.entries(summaryData).map(([category, { description }]) => (
-                    <div key={category}>
-                      <strong>{category}:</strong> {description}
-                    </div>
-                  ))
-                ) : (
-                  <p>Loading summary...</p>
-                )}
-              </div>
+              <Summary summaryData={summaryData} />
             ) : (
               <>
                 <h1>You have swiped everything!</h1>
                 <hr />
-                <button onClick={handleSubmit} className="swipe-submit-button">
+                <button
+                  onClick={handleSubmit}
+                  style={{
+                    marginTop: "30px",
+                    padding: "15px",
+                    fontSize: "30px",
+                    fontWeight: "normal",
+                    borderRadius: "15px",
+                    background: "linear-gradient(45deg, #0070f3, #00c6ff)",
+                    color: "#fff",
+                    cursor: "pointer",
+                    transition: "all 1s ease",
+                    backgroundSize: "200% 200%",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundImage =
+                      "linear-gradient(135deg, #1e90ff, #00bfff, #3cb371, #00fa9a)";
+                    e.currentTarget.style.animation =
+                      "wavyGradient 6s ease infinite";
+                    e.currentTarget.style.transform = "scale(1.05)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundImage =
+                      "linear-gradient(45deg, #0070f3, #00c6ff)";
+                    e.currentTarget.style.animation = "none";
+                    e.currentTarget.style.transform = "scale(1)";
+                  }}
+                >
                   Generate Summary
                 </button>
               </>
@@ -207,17 +233,8 @@ const SwipeCards: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {cards.length > 0 && (
-        <div className="swipe-buttons">
-          <button onClick={() => handleSwipe('left')} className="swipe-button swipe-left-button">
-            <FontAwesomeIcon icon={faThumbsDown} style={{ transform: 'rotateY(180deg)' }} />
-          </button>
-          <button onClick={() => handleSwipe('right')} className="swipe-button swipe-right-button">
-            <FontAwesomeIcon icon={faThumbsUp} />
-          </button>
-        </div>
-      )}
+      {/* Buttons */}
+      {cards.length > 0 && <SwipeButtons onSwipe={handleSwipe} />}
     </div>
   );
 };
