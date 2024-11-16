@@ -197,18 +197,16 @@ export const completeSession = async (
       response: swipe.response ? 'liked' : 'disliked',
     }));
 
-    const sessionName = session.anonymous ? 'Anonymous' : session.username;
+    const sessionName = session.anonymous ? 'Visitor' : session.username;
 
     // Generate summary based on swipes using AI
     const prompt = `Based on the following feedback from ${sessionName}, provide a unique, creative story of 5-10 lines. The feedback represents how users felt about different aspects of an event, including whether they "liked" or "disliked" certain aspects.
 
-    "Story Example: After exploring the Karamalmi campus, Maria submitted her thoughts. She enjoyed the variety and taste of the food, describing it as "delicious," though she found the seating areas a bit cramped.
-She appreciated the accessible campus layout, which made finding classrooms easy, and was glad the Wi-Fi was stable throughout her visit. However, she noticed that the study areas were a bit noisy for her liking, and while the campus was well-lit with natural light, the recreational options seemed somewhat limited. In the library, Maria found the staff to be very friendly, though the resources felt a bit scarce. She also suggested clearer labels for the recycling bins to help make eco-friendly choices easier. "
+    "Story Example: After exploring the Karamalmi campus, ${sessionName} submitted their thoughts. They enjoyed the variety and taste of the food, describing it as "delicious," though they found the seating areas a bit cramped.
+They appreciated the accessible campus layout, which made finding classrooms easy, and were glad the Wi-Fi was stable throughout their visit. However, they noticed that the study areas were a bit noisy for their liking, and while the campus was well-lit with natural light, the recreational options seemed somewhat limited. In the library, ${sessionName} found the staff to be very friendly, though the resources felt a bit scarce. They also suggested clearer labels for the recycling bins to help make eco-friendly choices easier. "
 
 Story:
 ${JSON.stringify(feedback, null, 2)}
-
-Use sessionName for the name in the story. If sessionName is not provided and the user has decided to swipe as "Anonymous", address the user in the story as "Visitor".
 `;
 
     // Fetch response from OpenAI with retry mechanism
