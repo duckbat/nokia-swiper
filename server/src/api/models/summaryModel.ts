@@ -2,14 +2,8 @@ import {model, Schema} from 'mongoose';
 import {ISummary} from '../../types/SummaryTypes'; // Adjust the path as necessary
 
 const SummarySchema = new Schema<ISummary>({
-  sessionId: {type: Schema.Types.ObjectId, required: true, ref: 'UserSession'},
-  categories: {
-    type: Map,
-    of: new Schema({
-      description: {type: String, required: true},
-    }),
-    required: true,
-  }, // Using Map for dynamic categories
+  sessionId: {type: Schema.Types.ObjectId, required: true, ref: 'Session'},
+  summaryText: {type: String, required: true}, // renamed to match the controller
   timestamp: {type: Date, default: Date.now},
 });
 

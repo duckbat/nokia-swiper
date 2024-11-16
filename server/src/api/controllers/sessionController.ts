@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// import Category from '../models/categoryModel';
 import {Request, Response, NextFunction} from 'express';
 import Session from '../models/sessionModel';
 import Question from '../models/questionModel';
 import Summary from '../models/summaryModel';
-import Category from '../models/categoryModel';
 import CustomError from '../../classes/CustomError';
 import {ApiResponse} from '../../types/Messages';
 import {ISession} from '../../types/SessionTypes';
@@ -140,7 +140,6 @@ export const deleteAllSessions = async (
   }
 };
 
-
 // Mark session as complete and create a summary
 
 // Retry mechanism for fetching data from OpenAI API
@@ -155,8 +154,14 @@ const fetchDataWithRetry = async (
       const response = await fetchData<ChatCompletion>(url, options);
       return response;
     } catch (error) {
-      if (error instanceof CustomError && error.message.includes('429') && i < retries - 1) {
-        console.warn(`Rate limit hit, retrying in ${delay}ms... (${i + 1}/${retries})`);
+      if (
+        error instanceof CustomError &&
+        error.message.includes('429') &&
+        i < retries - 1
+      ) {
+        console.warn(
+          `Rate limit hit, retrying in ${delay}ms... (${i + 1}/${retries})`,
+        );
         await new Promise((resolve) => setTimeout(resolve, delay));
         delay *= 2; // Exponential backoff
       } else {
@@ -174,16 +179,16 @@ export const completeSession = async (
   next: NextFunction,
 ) => {
   try {
-    const { sessionId } = req.body;
+    const {sessionId} = req.body;
     const session = await Session.findOneAndUpdate(
-      { sessionId },
-      { isComplete: true },
-      { new: true },
+      {sessionId},
+      {isComplete: true},
+      {new: true},
     );
     if (!session) {
       return res
         .status(404)
-        .json({ success: false, message: 'Session not found' });
+        .json({success: false, message: 'Session not found'});
     }
 
     // Extract question text and responses from the session for summary generation
@@ -192,20 +197,19 @@ export const completeSession = async (
       response: swipe.response ? 'liked' : 'disliked',
     }));
 
-    // Retrieve categories from the database
-    const categoriesDocs = await Category.find({});
-    const categories = categoriesDocs.map((category) => category.text);
+    const sessionName = session.anonymous ? 'Anonymous' : session.username;
 
     // Generate summary based on swipes using AI
-    const prompt = `Based on the following feedback, provide a unique description for each category listed below for the user. The feedback represents how users felt about different aspects of an event, including whether they "liked" or "disliked" certain aspects.
+    const prompt = `Based on the following feedback from ${sessionName}, provide a unique, creative story of 5-10 lines. The feedback represents how users felt about different aspects of an event, including whether they "liked" or "disliked" certain aspects.
 
-Categories: ${categories.join(', ')}
+    "Story Example: After exploring the Karamalmi campus, Maria submitted her thoughts. She enjoyed the variety and taste of the food, describing it as "delicious," though she found the seating areas a bit cramped.
+She appreciated the accessible campus layout, which made finding classrooms easy, and was glad the Wi-Fi was stable throughout her visit. However, she noticed that the study areas were a bit noisy for her liking, and while the campus was well-lit with natural light, the recreational options seemed somewhat limited. In the library, Maria found the staff to be very friendly, though the resources felt a bit scarce. She also suggested clearer labels for the recycling bins to help make eco-friendly choices easier. "
 
-Feedback:
+Story:
 ${JSON.stringify(feedback, null, 2)}
 
-For each category, write a brief and descriptive summary based on the feedback in the format: "Category: Description" Description example: "You had a positive experience and enjoyed the overall organization of the event."
-If there is no feedback for a particular category, provide a suitable general description. Be concise but descriptive.`;
+If sessionName is not provided address the user as "Stranger" or similar type of naming in the story.
+`;
 
     // Fetch response from OpenAI with retry mechanism
     const response = await fetchDataWithRetry(
@@ -222,7 +226,7 @@ If there is no feedback for a particular category, provide a suitable general de
             {
               role: 'system',
               content:
-                'You are a helpful assistant providing summaries based on user feedback.',
+                'You are a helpful and creative assistant providing short summary story based on user feedback.',
             },
             {
               role: 'user',
@@ -242,38 +246,15 @@ If there is no feedback for a particular category, provide a suitable general de
       !response.choices ||
       !response.choices[0]?.message?.content
     ) {
-      throw new CustomError('Failed to generate summary using AI', 500);
+      throw new CustomError('Failed to generate AI summary', 500);
     }
 
     const summaryText = response.choices[0].message.content.trim();
 
-    // Parse AI summary response into categories
-    const summaryData: Record<string, { description: string }> = {};
-    const summaryLines = summaryText.split('\n');
-    summaryLines.forEach((line) => {
-      const match = line.match(/^([\w\s]+):\s*(.*)$/);
-      if (match) {
-        const [, category, description] = match;
-        summaryData[category.trim()] = {
-          description: description.trim(),
-        };
-      }
-    });
-
-    // Fill in categories without feedback if not provided by AI
-    categories.forEach((category) => {
-      if (!summaryData[category]) {
-        summaryData[category] = {
-          description: 'No specific feedback provided',
-        };
-      }
-    });
-
     // Create and save the summary
     const summary = new Summary({
       sessionId: session._id,
-      categories: summaryData,
-      summaryText,
+      summaryText: summaryText,
       timestamp: new Date(),
     });
     const savedSummary = await summary.save();

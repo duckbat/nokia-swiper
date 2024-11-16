@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "./Card";
 import Summary from "./Summary";
 import SwipeButtons from "./SwipeButtons";
@@ -26,10 +26,7 @@ const SwipeCards: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [tapped, setTapped] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [summaryData, setSummaryData] = useState<Record<
-    string,
-    { description: string }
-  > | null>(null);
+  const [summaryText, setSummaryText] = useState<string | null>(null);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -99,7 +96,7 @@ const SwipeCards: React.FC = () => {
           sessionId,
         });
         console.log("Summary created:", response.data);
-        setSummaryData(response.data.data.categories);
+        setSummaryText(response.data.data.summaryText);
         setSubmitted(true);
       } catch (error) {
         console.error("Failed to complete session:", error);
@@ -193,7 +190,7 @@ const SwipeCards: React.FC = () => {
             transition={{ duration: 0.5 }}
           >
             {submitted ? (
-              <Summary summaryData={summaryData} />
+              <Summary summaryText={summaryText} />
             ) : (
               <>
                 <h1>You have swiped everything!</h1>
