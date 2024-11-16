@@ -208,7 +208,7 @@ She appreciated the accessible campus layout, which made finding classrooms easy
 Story:
 ${JSON.stringify(feedback, null, 2)}
 
-If sessionName is not provided address the user as "Stranger" or similar type of naming in the story.
+Use sessionName for the name in the story. If sessionName is not provided and the user has decided to swipe as "Anonymous", address the user in the story as "Visitor".
 `;
 
     // Fetch response from OpenAI with retry mechanism
