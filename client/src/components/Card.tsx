@@ -1,13 +1,14 @@
-import { motion, PanInfo } from 'framer-motion';
+import {motion, PanInfo} from 'framer-motion';
 import React from 'react';
+import background_img1 from '../app/nokia_blue.jpg';
 
 interface CardProps {
   content: string;
   onSwipe: (direction: 'left' | 'right') => void;
 }
 
-const Card: React.FC<CardProps> = ({ content, onSwipe }) => {
-  const dragConstraints = { left: -150, right: 150 };
+const Card: React.FC<CardProps> = ({content, onSwipe}) => {
+  const dragConstraints = {left: -150, right: 150};
 
   const handleDragEnd = (
     event: MouseEvent | TouchEvent | PointerEvent,
@@ -31,6 +32,11 @@ const Card: React.FC<CardProps> = ({ content, onSwipe }) => {
         height: 400,
         borderRadius: 10,
         backgroundColor: '#f2f2f2',
+        // backgroundImage: `url(${background_img1})`,
+        // backgroundColor: background_img1 ? 'transparent' : '#f2f2f2', // Fallback color
+        // backgroundSize: 'cover', // Ensure the image covers the entire card
+        // backgroundPosition: 'center', // Center the image
+        // backgroundRepeat: 'no-repeat', // Prevent tiling
         display: 'flex',
         justifyContent: 'center',
         textAlign: 'center',
@@ -44,10 +50,10 @@ const Card: React.FC<CardProps> = ({ content, onSwipe }) => {
         cursor: 'pointer',
         position: 'absolute',
       }}
-      whileTap={{ scale: 0.95 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
+      whileTap={{scale: 0.95}}
+      initial={{opacity: 0, y: 20}}
+      animate={{opacity: 1, y: 0}}
+      exit={{opacity: 0, y: -20}}
     >
       {content}
     </motion.div>

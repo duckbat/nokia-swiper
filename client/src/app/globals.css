@@ -5,6 +5,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color1-start: #00c8ffa5;
+  --color2-start: #0073ff9a;
+  --color1-end: #0000ff95;
+  --color2-end: #00f2ffa3;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,20 +28,16 @@
 
 @keyframes smoothGradient {
   0% {
-    background: linear-gradient(
-      45deg,
-      #00c6ff,
-      #0072ff
-    ); /* Starting gradient */
+    --color1: var(--color1-start);
+    --color2: var(--color2-start);
   }
   50% {
+    --color1: var(--color1-end);
+    --color2: var(--color2-end);
   }
   100% {
-    background: linear-gradient(
-      45deg,
-      #0000ff,
-      #00f2ff
-    ); /* Back to starting gradient */
+    --color1: var(--color1-start);
+    --color2: var(--color2-start);
   }
 }
 
@@ -52,12 +52,13 @@ body {
   align-items: center;
   min-height: -webkit-fill-available;
   height: 100dvh;
-  /* animation: smoothGradient 10s ease infinite;  */
-  background: linear-gradient(
+  /* animation: smoothGradient 100s ease infinite;  */
+  background: linear-gradient(45deg, #00c8ffa5, #0073ff9a);
+  /* background: linear-gradient(
     45deg,
     #0099ff3c,
     #00b5e230
-  ); /* Middle gradient */
+  ); */
 }
 
 @layer utilities {
@@ -89,7 +90,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 100%;
+  /* width: 100%; */
   max-width: 300px;
   margin-top: 20px;
 }
@@ -133,7 +134,7 @@ body {
 
 .swipe-instructions {
   color: #333;
-  margin-bottom: 30px;
+  /* margin-bottom: 10px; */
 }
 
 .swipe-results {
@@ -161,15 +162,15 @@ body {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 225px;
-  margin-top: 450px;
-  gap: 50px;
+  max-width: 200px;
+  margin-top: 500px;
+  /* gap: 10px; */
 }
 
 .swipe-button {
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 65px;
+  height: 65px;
   border: none;
   cursor: pointer;
   font-size: 20px;
