@@ -1,0 +1,356 @@
+openapi: 3.0.0
+info:
+  title: Feedback-Swiper API-Documentation
+  version: 1.0.0
+  description: API for managing questions, sessions, summaries, and admin authentication.
+  contact:
+    name: Developer Team
+    email: khai.chan@outlook.com
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: Question
+  - name: Session
+  - name: Summaries
+  - name: Admin
+paths:
+  /api/v1/questions:
+    get:
+      tags:
+        - Question
+      summary: Get all Questions
+      responses:
+        '200':
+          description: List of all questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+    post:
+      tags:
+        - Question
+      summary: Create a new Question
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateQuestion'
+      responses:
+        '201':
+          description: Question created successfully
+  /api/v1/questions/{id}:
+    put:
+      tags:
+        - Question
+      summary: Update a Question by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the question to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateQuestion'
+      responses:
+        '200':
+          description: Question updated successfully
+    delete:
+      tags:
+        - Question
+      summary: Delete a Question by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the question to delete
+      responses:
+        '204':
+          description: Question deleted successfully
+  /api/v1/sessions/:
+    get:
+      tags:
+        - Session
+      summary: Get all Sessions
+      responses:
+        '200':
+          description: List of all sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+    post:
+      tags:
+        - Session
+      summary: Create a new Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSession'
+      responses:
+        '201':
+          description: Session created successfully
+  /api/v1/sessions/swipe:
+    post:
+      tags:
+        - Session
+      summary: Add a Swipe to a Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Swipe'
+      responses:
+        '200':
+          description: Swipe added successfully
+  /api/v1/sessions/complete:
+    post:
+      tags:
+        - Session
+      summary: Complete a Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteSession'
+      responses:
+        '200':
+          description: Session completed successfully
+  /api/v1/summaries:
+    get:
+      tags:
+        - Summaries
+      summary: Get all Summaries
+      responses:
+        '200':
+          description: List of all summaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Summary'
+    delete:
+      tags:
+        - Summaries
+      summary: Delete all Summaries
+      responses:
+        '204':
+          description: All summaries deleted successfully
+  /api/v1/summaries/{id}:
+    get:
+      tags:
+        - Summaries
+      summary: Get a Summary by Session ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the session to retrieve the summary for
+      responses:
+        '200':
+          description: Summary retrieved successfully
+  /api/v1/login:
+    post:
+      summary: Login as an admin
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Admin's username
+                  example: admin
+                password:
+                  type: string
+                  description: Admin's password
+                  example: Admin@123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Login successful
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR...
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid credentials
+  /api/v1/create-admin:
+    post:
+      summary: Create a new admin user
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Admin's username
+                  example: newadmin
+                password:
+                  type: string
+                  description: Admin's password
+                  example: NewAdmin@123
+      responses:
+        '201':
+          description: Admin created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Admin user created successfully
+        '400':
+          description: Validation error or Admin already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Admin already exists
+components:
+  schemas:
+    Admin:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    Create Admin:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        createdBy:
+          type: string
+    CreateQuestion:
+      type: object
+      required:
+        - text
+        - createdBy
+      properties:
+        text:
+          type: string
+        createdBy:
+          type: string
+    UpdateQuestion:
+      type: object
+      required:
+        - newText
+      properties:
+        newText:
+          type: string
+    Session:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        name:
+          type: string
+        anonymous:
+          type: boolean
+    CreateSession:
+      type: object
+      required:
+        - name
+        - anonymous
+      properties:
+        name:
+          type: string
+        anonymous:
+          type: boolean
+    Swipe:
+      type: object
+      required:
+        - sessionId
+        - questionId
+        - response
+      properties:
+        sessionId:
+          type: string
+        questionId:
+          type: string
+        response:
+          type: boolean
+    CompleteSession:
+      type: object
+      required:
+        - sessionId
+      properties:
+        sessionId:
+          type: string
+    Summary:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        responses:
+          type: array
+          items:
+            type: boolean
