@@ -1,6 +1,6 @@
 # Feedback Swiper local installation guide
 
-This document will guide you on how to install and run the Swiper app  backend and client projects locally.
+This document will guide you on how to install and run the Feedback Swiper app backend and client projects locally.
 
 ## Prerequisites
 
@@ -81,6 +81,14 @@ Ensure that you have the following installed on your machine before proceeding:
 
    ```
    http://localhost:3000/api/v1
+   ```
+
+8. **Access API Documentation**
+
+   Once the server is running, API Documentation can be accessible at:
+
+   ```
+   http://localhost:3000/api/docs
    ```
 
 ### Client Setup
