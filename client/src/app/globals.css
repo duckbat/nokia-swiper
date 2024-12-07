@@ -160,17 +160,17 @@ body {
 
 .swipe-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
   max-width: 200px;
-  margin-top: 500px;
-  /* gap: 10px; */
+  /* margin-top: 500px; */
+  gap: 40px;
 }
 
 .swipe-button {
   border-radius: 50%;
-  width: 65px;
-  height: 65px;
+  width: 80px;
+  height: 80px;
   border: none;
   cursor: pointer;
   font-size: 20px;
@@ -178,10 +178,11 @@ body {
   justify-content: center;
   align-items: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s ease;
 }
 
 .swipe-button:active {
-  transform: scale(0.9);
+  transform: scale(0.8);
 }
 
 .swipe-left-button {

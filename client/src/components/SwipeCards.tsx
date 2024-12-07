@@ -27,6 +27,7 @@ const SwipeCards: React.FC = () => {
   const [tapped, setTapped] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [summaryText, setSummaryText] = useState<string | null>(null);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -166,43 +167,91 @@ const SwipeCards: React.FC = () => {
     );
   }
 
+  const handleShowInstructions = () => {
+    setShowInstructions(true);
+    setTimeout(() => {
+      setShowInstructions(false);
+    }, 2000); // Show for 5 seconds
+  };
+
+  // FLEX 1 HERE
   return (
     <div className="swipe-container">
       {cards.length > 0 && (
-        <div
-          className="swipe-instructions"
-          style={{
-            fontWeight: 'bold',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: '15px',
-          }}
-        >
-          <div>
-            <p>Swipe left</p>
-            <p
+        <div style={{padding: '10px', textAlign: 'center', flex: 0.85}}>
+          {!showInstructions && (
+            <button
+              onClick={handleShowInstructions}
               style={{
-                fontSize: '14px',
-                fontWeight: 'normal',
-                letterSpacing: '2px',
+                cursor: 'pointer',
+                backgroundColor: '#0073ff',
+                color: '#ffffff',
+                fontWeight: 'bold',
+                fontSize: '1.5em',
+                padding: '10px 20px',
+                border: 'none',
+                borderRadius: '8px',
+                textAlign: 'center',
+                touchAction: 'manipulation',
+                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                transition:
+                  'transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease',
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.transform = 'scale(0.9)';
+                e.currentTarget.style.opacity = '0.8';
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.opacity = '1';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.opacity = '1';
               }}
             >
-              Disagree
-            </p>
-          </div>
-          <div>
-            <p>Swipe right</p>
-            <p
+              How to use?
+            </button>
+          )}
+          {showInstructions && (
+            <div
+              className="swipe-instructions"
               style={{
-                fontSize: '14px',
-                fontWeight: 'normal',
-                letterSpacing: '2px',
+                fontWeight: 'bold',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: '15px',
+                flexWrap: 'wrap', // Ensures proper alignment on small screens
+                fontSize: '1em', // Mobile-friendly text size
               }}
             >
-              Agree
-            </p>
-          </div>
+              <div style={{textAlign: 'center'}}>
+                <p>Swipe left</p>
+                <p
+                  style={{
+                    fontSize: '0.9em',
+                    fontWeight: 'normal',
+                    letterSpacing: '2px',
+                  }}
+                >
+                  Disagree
+                </p>
+              </div>
+              <div style={{textAlign: 'center'}}>
+                <p>Swipe right</p>
+                <p
+                  style={{
+                    fontSize: '0.9em',
+                    fontWeight: 'normal',
+                    letterSpacing: '2px',
+                  }}
+                >
+                  Agree
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
