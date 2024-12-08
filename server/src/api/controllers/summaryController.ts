@@ -49,3 +49,22 @@ export const deleteAllSummaries = async (req: Request, res: Response<ApiResponse
   }
 };
 
+// Delete a single summary by ID
+export const deleteSummaryById = async (req: Request<{ summaryId: string }>, res: Response<ApiResponse<null>>, next: NextFunction) => {
+  try {
+    const { summaryId } = req.params;
+    if (!summaryId) {
+      throw new CustomError('Missing required field: summaryId', 400);
+    }
+    const summary = await Summary.findByIdAndDelete(summaryId);
+    if (!summary) {
+      return res.status(404).json({ success: false, message: 'Summary not found' });
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Summary deleted',
+    });
+  } catch (error) {
+    next(new CustomError((error as Error).message, 500));
+  }
+};

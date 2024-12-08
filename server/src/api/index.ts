@@ -3,7 +3,7 @@ import {MessageResponse} from '../types/Messages';
 import sessionRoute from './routes/sessionRoutes';
 import questionRoute from './routes/questionRoutes';
 import summaryRoute from './routes/summaryRoutes';
-// import categoryRoute from './routes/categoryRoutes';
+import adminRoute from './routes/adminRoutes'; // Add admin route
 
 const router = express.Router();
 
@@ -17,6 +17,6 @@ router.get<{}, MessageResponse>('/', (_req: Request, res: Response) => {
 router.use('/sessions', sessionRoute);
 router.use('/questions', questionRoute);
 router.use('/summaries', summaryRoute);
-// router.use('/categories', categoryRoute);
+router.use('/admin', adminRoute); // NEW admin route
 
 export default router;
