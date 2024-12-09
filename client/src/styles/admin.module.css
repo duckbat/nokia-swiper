@@ -1,6 +1,6 @@
 .pageWrapper {
   min-height: 100vh;
-  background: #f0f4f8;
+  background: linear-gradient(to bottom, #eaf0f5, #f0f4f8);
   display: flex;
   flex-direction: column;
 }
@@ -11,13 +11,14 @@
   padding: 15px 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .navTitle {
-  font-size: 1.5em;
+  font-size: 1.6em;
   color: #0070f3;
   margin: 0;
+  font-weight: 600;
 }
 
 .container {
@@ -26,11 +27,13 @@
   max-width: 1200px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
+  color: #333;
 }
 
 .gridLayout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: 1fr 1fr; /* 2x2 Grid */
+  grid-template-rows: 1fr 1fr;
   gap: 20px;
 }
 
@@ -43,17 +46,27 @@
   box-shadow: 0 3px 8px rgba(0,0,0,0.05);
 }
 
-.card h2 {
-  font-weight: bold;
-  margin-top: 0;
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cardIcon {
   color: #0070f3;
-  margin-bottom: 8px;
+  font-size: 1.2em;
+}
+
+.card h2 {
+  font-weight: 600;
+  margin: 0;
+  color: #0070f3;
 }
 
 .cardDescription {
   font-size: 0.9em;
   color: #555;
-  margin-bottom: 15px;
+  margin: 10px 0 15px 0;
 }
 
 .scrollableContent {
@@ -73,8 +86,8 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
   font-size: 0.9em;
+  transition: background-color 0.3s;
 }
 .button:hover {
   background-color: #005bb5;
@@ -87,9 +100,9 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin-left: 10px;
-  transition: background-color 0.3s;
   font-size: 0.8em;
+  transition: background-color 0.3s;
+  margin-left: 10px;
 }
 .deleteButton:hover {
   background-color: #e63946;
@@ -121,6 +134,7 @@
   margin: 0;
   font-size: 0.95em;
   color: #333;
+  max-width: 80%;
 }
 
 .loginContainer {
@@ -135,7 +149,7 @@
 .loginContainer h1 {
   margin-bottom: 20px;
   color: #fff;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .input {
@@ -155,7 +169,20 @@
 .inputContainer {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
   gap: 10px;
 }
 
+/* Reports Chart Additional Styling */
+.reportsChart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.reportsLegend {
+  text-align: center;
+  font-size: 0.9em;
+  color: #333;
+  margin-top: 10px;
+}
