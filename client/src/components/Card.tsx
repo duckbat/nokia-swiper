@@ -1,6 +1,5 @@
 import {motion, PanInfo} from 'framer-motion';
 import React from 'react';
-import background_img1 from '../app/nokia_blue.jpg';
 
 interface CardProps {
   content: string;
