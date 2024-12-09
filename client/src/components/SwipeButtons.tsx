@@ -1,25 +1,28 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import React from 'react';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faThumbsUp, faThumbsDown} from '@fortawesome/free-solid-svg-icons';
 
 interface SwipeButtonsProps {
-  onSwipe: (direction: "left" | "right") => void;
+  onSwipe: (direction: 'left' | 'right') => void;
 }
 
-const SwipeButtons: React.FC<SwipeButtonsProps> = ({ onSwipe }) => {
+const SwipeButtons: React.FC<SwipeButtonsProps> = ({onSwipe}) => {
   return (
     <div className="swipe-buttons">
       <button
-        onClick={() => onSwipe("left")}
+        onClick={() => onSwipe('left')}
         className="swipe-button swipe-left-button"
       >
-        <FontAwesomeIcon icon={faThumbsDown} style={{ transform: "rotateY(180deg)" }} />
+        <FontAwesomeIcon
+          icon={faThumbsDown}
+          style={{transform: 'rotateY(180deg)', fontSize: '1.75rem'}}
+        />
       </button>
       <button
-        onClick={() => onSwipe("right")}
+        onClick={() => onSwipe('right')}
         className="swipe-button swipe-right-button"
       >
-        <FontAwesomeIcon icon={faThumbsUp} />
+        <FontAwesomeIcon icon={faThumbsUp} style={{fontSize: '1.75rem'}} />
       </button>
     </div>
   );
